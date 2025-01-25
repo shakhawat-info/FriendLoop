@@ -6,12 +6,14 @@ import { getAuth, createUserWithEmailAndPassword , updateProfile , sendEmailVeri
 import { Button, TextField } from "@mui/material";
 import { Link } from "react-router";
 import Warning from "../components/Warning";
+import Success from "../components/Success";
 
 
 // icons
 import { GoEye } from "react-icons/go";
 import { GoEyeClosed } from "react-icons/go";
 import { AiOutlineLogin } from "react-icons/ai";
+import { BsArrowRepeat } from "react-icons/bs";
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +21,7 @@ const Signup = () => {
     const auth = getAuth();
     const [warning , setWarning] = useState('');
     const [sussess , setSuccess] = useState('');
+    const [process , setProcess] = useState(false)
 
     // Name func
     let [name , setName] = useState('') ;
@@ -88,7 +91,7 @@ const Signup = () => {
 
         // data write on database
         if(/^[a-zA-Z]+(\.[ ]?[a-zA-Z]+)*$/.test(name) && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/.test(password)){
-          
+          setProcess(true)
           // start create user
           createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
@@ -104,7 +107,14 @@ const Signup = () => {
               // Email verification sent!
               sendEmailVerification(auth.currentUser)
               .then(() => {
-                // ...
+                setProcess(false);
+                setName('');
+                setEmail('');
+                setPassword('');
+                setSuccess('Account created successfull , please login');
+                setTimeout(() => {
+                  setSuccess('');
+                }, 2000);
               });
             })
             // profile update error
@@ -114,6 +124,7 @@ const Signup = () => {
               setTimeout(() => {
                 setWarning('');
               }, 2000);
+              setProcess(false)
             });
           })
           // signup error
@@ -124,6 +135,7 @@ const Signup = () => {
             setTimeout(() => {
               setWarning('');
             }, 2000);
+            setProcess(false)
           });
         }
         
@@ -132,6 +144,7 @@ const Signup = () => {
   return (
     <div className=" relative ">
       <Warning er={warning}  />
+      <Success succ={sussess}/>
     <div className="flex flex-col justify-center h-screen w-2/5 mx-auto   ">
       {/* welcome */}
       <div className="">
@@ -145,13 +158,13 @@ const Signup = () => {
 
       {/* Name */}
       <div className="mt-10">
-        <TextField onChange={nameSet} id="Name" label="Full Name" variant="outlined" sx={{".MuiOutlinedInput-input":{padding: '10px'} , ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root":{top: '-6px'} , ".MuiInputBase-root input": {color: 'gray'}}} className="w-full    " placeholder="Your Name"/>
+        <TextField onChange={nameSet} id="Name" value={name} label="Full Name" variant="outlined" sx={{".MuiOutlinedInput-input":{padding: '10px'} , ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root":{top: '-6px'} , ".MuiInputBase-root input": {color: 'gray'}}} className="w-full    " placeholder="Your Name"/>
         {namErr && <p className="text-brand font-Ubuntu ">{namErr}</p>}
       </div>
 
       {/* email */}
       <div className="mt-5">
-        <TextField onChange={mailSet} id="email" type="email" label="Email" variant="outlined" sx={{".MuiOutlinedInput-input":{padding: '10px'} , ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root":{top: '-6px'} , ".MuiInputBase-root input": {color: 'gray'}}} className="w-full    " placeholder="Your Email"/>
+        <TextField onChange={mailSet} id="email" value={email} type="email" label="Email" variant="outlined" sx={{".MuiOutlinedInput-input":{padding: '10px'} , ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root":{top: '-6px'} , ".MuiInputBase-root input": {color: 'gray'}}} className="w-full    " placeholder="Your Email"/>
         {mailErr && <p className="text-brand font-Ubuntu ">{mailErr}</p>}
       </div>
 
@@ -163,7 +176,7 @@ const Signup = () => {
 
       {/* Password */}
       <div className="mt-5 relative">
-        <TextField onChange={passSet} type={showPassword ? "text" : "password"} id="password" label="Password" variant="outlined" sx={{".MuiInputBase-root input":{padding: '10px'}, ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root " : {top: '-6px'}}} className="w-full    "   placeholder="password"/>
+        <TextField onChange={passSet} type={showPassword ? "text" : "password"} value={password} id="password" label="Password" variant="outlined" sx={{".MuiInputBase-root input":{padding: '10px'}, ".css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root " : {top: '-6px'}}} className="w-full    "   placeholder="password"/>
         { showPassword ?  
         < GoEye  className="absolute top-[4px] right-[0px] text-xl cursor-pointer p-2 box-content   " onClick={()=> setShowPassword ( prevState => !prevState)}/>
         : 
@@ -173,8 +186,12 @@ const Signup = () => {
       </div>
 
       {/* signIN Button */}
-      <div className="mt-15">
-        <Button onClick={signUp} variant="outlined" endIcon={<AiOutlineLogin />} className="w-full"> SignUp </Button>
+      <div className="mt-15 flex justify-center relative">
+        {process ? 
+        <Button onClick={signUp} variant="outlined" endIcon={<BsArrowRepeat className="animate-rotate360  "/>} className="w-full"> Signing Up </Button>
+        :
+        <Button onClick={signUp} variant="outlined" endIcon={<AiOutlineLogin/>} className="w-full"> SignUp </Button>
+        }
       </div>
 
       {/* SignIn with */}
