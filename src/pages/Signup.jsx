@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { getDatabase, ref, set } from "firebase/database";
+import { getAuth, createUserWithEmailAndPassword , updateProfile , sendEmailVerification} from "firebase/auth";
 
 // components
 import { Button, TextField } from "@mui/material";
 import { Link } from "react-router";
+import Warning from "../components/Warning";
+
 
 // icons
 import { GoEye } from "react-icons/go";
@@ -11,10 +15,13 @@ import { AiOutlineLogin } from "react-icons/ai";
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const db = getDatabase();
+    const auth = getAuth();
+    const [warning , setWarning] = useState('');
+    const [sussess , setSuccess] = useState('');
 
     // Name func
     let [name , setName] = useState('') ;
-    let [isname , setIsname] = useState(false)
     let [namErr , setNamErr] = useState('');
     let nameSet = (e)=>{
         setName(e.target.value);
@@ -23,7 +30,6 @@ const Signup = () => {
 
     // Email func
     let [email , setEmail] = useState('');
-    let [isemail , setIsemail] = useState(false);
     let [mailErr , setMailErr] = useState('');
     let mailSet = (e)=>{
         setEmail(e.target.value);
@@ -32,7 +38,6 @@ const Signup = () => {
 
     // password func
     let [password , setPassword] = useState('');
-    let [ispassword , setIspassword] = useState(false);
     let [passErr , setPassErr] = useState('');
     let passSet = (e)=>{
         setPassword(e.target.value);
@@ -52,9 +57,7 @@ const Signup = () => {
                 console.log('4 charecters long');
                 
             }else{
-                if(/^[a-zA-Z]+(\.[ ]?[a-zA-Z]+)*$/.test(name)){
-                    setIsname(true);
-                }else{
+                if(!/^[a-zA-Z]+(\.[ ]?[a-zA-Z]+)*$/.test(name)){
                     setNamErr('invalid name or spacing.')
                 }
             }
@@ -66,11 +69,8 @@ const Signup = () => {
             setMailErr('Mail can not be empty!')
         }
         else{
-            if(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
-                setIsemail(true);
-            }
-            else{
-                setMailErr('Invalid email!');
+            if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
+              setMailErr('Invalid email!');
             }
         }
 
@@ -80,18 +80,58 @@ const Signup = () => {
             setPassErr('Password can not be empty!')
         }
         else{
-            if(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/.test(password)){
-                setIspassword(true);
-            }
-            else{
-                setPassErr("The password must be at least 8 charecters and includes (A-Z , a-z , 0-9 , symbol '! @ #' )")
+            if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/.test(password)){
+              setPassErr("The password must be at least 8 charecters and includes (A-Z , a-z , 0-9 , symbol '! @ #' )")
             }
         }
 
+
+        // data write on database
+        if(/^[a-zA-Z]+(\.[ ]?[a-zA-Z]+)*$/.test(name) && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/.test(password)){
+          
+          // start create user
+          createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            
+            // set user name and profile / update profile
+            updateProfile(auth.currentUser, {
+              displayName: name, 
+              photoURL: "https://picsum.photos/200"
+            })
+            // user set in database
+            .then(() => {
+              const user = userCredential.user;
+              // Email verification sent!
+              sendEmailVerification(auth.currentUser)
+              .then(() => {
+                // ...
+              });
+            })
+            // profile update error
+            .catch((error) => {
+              // create error
+              setWarning(error);
+              setTimeout(() => {
+                setWarning('');
+              }, 2000);
+            });
+          })
+          // signup error
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setWarning(errorCode);
+            setTimeout(() => {
+              setWarning('');
+            }, 2000);
+          });
+        }
+        
     }
 
   return (
-    <div className="  ">
+    <div className=" relative ">
+      <Warning er={warning}  />
     <div className="flex flex-col justify-center h-screen w-2/5 mx-auto   ">
       {/* welcome */}
       <div className="">
@@ -133,13 +173,12 @@ const Signup = () => {
       </div>
 
       {/* signIN Button */}
-      <div className="">
-        <span className="loader"></span>
+      <div className="mt-15">
         <Button onClick={signUp} variant="outlined" endIcon={<AiOutlineLogin />} className="w-full"> SignUp </Button>
       </div>
 
       {/* SignIn with */}
-      <div className="mt-[100px]">
+      <div className="mt-[20px]">
         <h4 className="font-Ubuntu text-lg mt-10 text-center  ">You have an account already? Please <Link to="/" className="text-brand EffUnderline relative">Login</Link>.</h4>
       </div>
     </div>
