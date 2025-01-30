@@ -16,8 +16,11 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { SiGithub } from "react-icons/si";
 import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import  {userSlice}  from "../redux-store/features/currentuser/currentuserSlice";
 
 const Signin = () => {
+  const dispatch = useDispatch();
   const db = getDatabase();
   const auth = getAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -46,6 +49,7 @@ const Signin = () => {
       // Signed in 
       const user = userCredential.user;
       // ...
+      dispatch(userSlice({...user}))
       console.log(user);
     // set data to database
     set(ref(db, 'users/' + user.uid), {
@@ -60,35 +64,44 @@ const Signin = () => {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      setWarning(error.code);
+      setTimeout(() => {
+        setWarning('');
+      }, 3000);
     });
   }
 
   // google login
   let googleLogin = ()=>{
     signInWithPopup(auth, provider)
-  // .then((result) => {
-  //   const user = result.user;
-  //   // console.log(user);
+  .then((result) => {
+    const user = result.user;
     
-  //   // set data to database
-  //   set(ref(db, 'users/' + user.uid), {
-  //     name: user.displayName,
-  //     email: user.email,
-  //     uid: user.uid ,
-  //     metadata: {...user.metadata},
-  //     photoURL: user.photoURL
-  //   });
+    // Dataset to redux and localstorage
+    dispatch(userSlice({...user}))
+    localStorage.setItem("user" , JSON.stringify({...user}))
+    
+    // set data to database
+    set(ref(db, 'users/' + user.uid), {
+      name: user.displayName,
+      email: user.email,
+      uid: user.uid ,
+      metadata: {...user.metadata},
+      photoURL: user.photoURL
+    })
     
     
-  // }).catch((error) => {
-  //   // Handle Errors here.
-  //   const errorCode = error.code;
-  //   const errorMessage = error.message;
-  //   // The AuthCredential type that was used.
-  //   const credential = GoogleAuthProvider.credentialFromError(error);
-  //   setWarning(errorCode);
-  // });
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    setWarning(errorCode);
+  });
   }
+
+  
   return (
     <div className=" relative ">
       <Warning er={warning}  />

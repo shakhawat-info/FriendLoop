@@ -2,6 +2,14 @@
 
 
 @theme {
+  /* container */
+  --container-sm: 500px;
+  --container-md: 700px;
+  --container-lg: 900px;
+  --container-xl: 1100px;
+  --container-2xl: 1300px;
+
+  
   /* font family */
   --font-Aldrich: "Aldrich", "sans-serif";
   --font-Ubuntu: "Ubuntu", "serif";

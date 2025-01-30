@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword , updateProfile , sendEmailVerification} from "firebase/auth";
+import { useNavigate } from "react-router";
 
 // components
 import { Button, TextField } from "@mui/material";
@@ -21,7 +22,8 @@ const Signup = () => {
     const auth = getAuth();
     const [warning , setWarning] = useState('');
     const [sussess , setSuccess] = useState('');
-    const [process , setProcess] = useState(false)
+    const [process , setProcess] = useState(false);
+    const navigate = useNavigate()
 
     // Name func
     let [name , setName] = useState('') ;
@@ -114,6 +116,7 @@ const Signup = () => {
                 setSuccess('Account created successfull , please login');
                 setTimeout(() => {
                   setSuccess('');
+                  navigate('/')
                 }, 2000);
               });
             })
