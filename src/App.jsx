@@ -11,10 +11,13 @@ import { createTheme, ThemeProvider } from '@mui/material';
 
 
 function App() {
-  const data = useSelector((state)=> state.user.value)
+  const data = useSelector((state)=> state.user.value);
+  const isdark = useSelector((state)=>state.theme.value)
+  
+  
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: isdark ? 'light':'dark',
     },
   });
   return (
