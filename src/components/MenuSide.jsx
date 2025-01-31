@@ -21,8 +21,16 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AppsIcon from '@mui/icons-material/Apps';
-import { Collapse, List, ListItemButton } from '@mui/material';
-import { StarBorder } from '@mui/icons-material';
+import { FcSettings } from "react-icons/fc";
+import { Button, ListItemButton } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { MdContactSupport } from "react-icons/md";
+import { IoIosLogOut } from "react-icons/io";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+
 
 
 export default function MenuSide() {
@@ -32,7 +40,7 @@ export default function MenuSide() {
   const menuExtend = useSelector((state)=>state.menushort.value);
   const [menuWidth , setMenuWidth] = React.useState(370)
   const dispatch = useDispatch();
-  
+  const [issetting , setIsetting] = React.useState(false)
   
   // dark-light theme
   const handleTheme = ()=>{
@@ -46,16 +54,17 @@ export default function MenuSide() {
   }
 
   React.useEffect(()=>{
-    if(menuExtend) setMenuWidth(370);
+    if(menuExtend) setMenuWidth(450);
     if(!menuExtend) setMenuWidth(60);
   },[menuExtend])
 
 
 // 
+console.log(issetting);
 
 
   return (
-    <Paper sx={{  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.2s'}}>
+    <Paper sx={{  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s'  }}>
       <div className={`flex pl-3 pt-3 gap-3 relative `}>
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
@@ -110,9 +119,58 @@ export default function MenuSide() {
           </ListItemIcon>
           {menuExtend && <ListItemText>Notifications</ListItemText>}
         </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <PlayCircleOutlineIcon fontSize="medium" />
+          </ListItemIcon>
+          {menuExtend && <ListItemText>Video</ListItemText>}
+        </MenuItem>
       </MenuList>
+
       <Divider />
+
+      <MenuItem onClick={()=>setIsetting(!issetting)}  >
+        <ListItemIcon>
+          <FcSettings fontSize="25px" />
+        </ListItemIcon>
+        {menuExtend && <ListItemText>Setting & Privacy</ListItemText>}
+        {menuExtend && <Button>{issetting ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> }</Button>}
+      </MenuItem>
+
+      {/* setting options */}
+      <div style={{height: issetting ? 200 : 0, flexDirection: 'column' , alignItems: 'start' , transition: '.4s' , padding: 0, margin: 0 , overflow: 'hidden'}}>
+          <ListItemButton sx={{ pl: 5 }}>
+            <ListItemIcon sx={{minWidth: 35}}>
+              <ManageAccountsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Setting" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+            <ListItemIcon sx={{minWidth: 35}}>
+              <AccountBalanceWalletIcon />
+            </ListItemIcon>
+            <ListItemText primary="Order & Payments" />
+          </ListItemButton>
+      </div>
+
+      <hr className='text-gray-300'/>
+
+      <MenuItem>
+        <ListItemIcon>
+          <MdContactSupport fontSize="25px" />
+        </ListItemIcon>
+        {menuExtend && <ListItemText>Help & Support</ListItemText>}
+        {menuExtend && <Button><KeyboardArrowDownIcon/></Button>}
+      </MenuItem>
       
+      <hr className='text-gray-300'/>
+
+      <MenuItem>
+        <ListItemIcon>
+          <IoIosLogOut fontSize="25px" />
+        </ListItemIcon>
+        {menuExtend && <ListItemText>Log out</ListItemText>}
+      </MenuItem>
     </Paper>
   );
 }
