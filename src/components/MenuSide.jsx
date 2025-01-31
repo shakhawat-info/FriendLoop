@@ -1,88 +1,96 @@
 import * as React from 'react';
-import { extendTheme, styled } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import Grid from '@mui/material/Grid2';
+import { useDispatch, useSelector } from 'react-redux';
+import {darktheme} from '../redux-store/features/dark-light theme/themeSlice';
 
-const NAVIGATION = [
-  {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
+// components
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+
+// icons
+import LightModeIcon from '@mui/icons-material/LightMode';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import Cloud from '@mui/icons-material/Cloud';
+import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined';
 
 
-];
-
-const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: 'class',
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-
-
-
-
-export default function MenuSide(props) {
-
-
-
+export default function MenuSide() {
+  // current user data
+  const data = useSelector((state)=>state.user.value);
+  const themeMode = useSelector((state)=>state.theme.value);
+  const dispatch = useDispatch()
+  
+  
+  // dark-light theme
+  const handleTheme = ()=>{
+    dispatch(darktheme())
+    localStorage.setItem("DarkLightTheme" , themeMode);
+  }
 
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      
-    >
-      <DashboardLayout theme={demoTheme}>
-      </DashboardLayout>
-    </AppProvider>
+    <Paper sx={{ width: 350, maxWidth: '100%' , height: '100vh', }}>
+      <div className='flex pl-3 pt-3 gap-3'>
+        <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>
+        <div className="text-center w-full mt-3">
+          <h2 className='font-Aldrich  '>{data.displayName}</h2>
+
+          <div className="flex">
+
+          {/* theme options */}
+            <button type="button" onClick={handleTheme } className=' cursor-pointer '>
+              {themeMode ? <LightModeIcon/> : <NightsStayIcon/>}
+            </button>
+
+            {/*  */}
+            <button type="button" className='cursor-pointer '>
+              <MenuOpenOutlinedIcon/>
+            </button>
+          </div>
+        </div>
+      </div>
+      <MenuList>
+        <MenuItem>
+          <ListItemIcon>
+            <ContentCut fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Cut</ListItemText>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            ⌘X
+          </Typography>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <ContentCopy fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Copy</ListItemText>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            ⌘C
+          </Typography>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <ContentPaste fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Paste</ListItemText>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            ⌘V
+          </Typography>
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          <ListItemIcon>
+            <Cloud fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Web Clipboard</ListItemText>
+        </MenuItem>
+      </MenuList>
+    </Paper>
   );
 }
