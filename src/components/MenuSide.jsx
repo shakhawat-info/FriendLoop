@@ -30,6 +30,12 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import GTranslateIcon from '@mui/icons-material/GTranslate';
+import { FcMindMap } from "react-icons/fc";
+import { LiaHandsHelpingSolid } from "react-icons/lia";
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
+import { FcAbout } from "react-icons/fc";
 
 
 
@@ -40,7 +46,8 @@ export default function MenuSide() {
   const menuExtend = useSelector((state)=>state.menushort.value);
   const [menuWidth , setMenuWidth] = React.useState(370)
   const dispatch = useDispatch();
-  const [issetting , setIsetting] = React.useState(false)
+  const [issetting , setIsetting] = React.useState(false);
+  const [isHelp , setIsHelp] = React.useState(false)
   
   // dark-light theme
   const handleTheme = ()=>{
@@ -60,11 +67,11 @@ export default function MenuSide() {
 
 
 // 
-console.log(issetting);
+console.log(isHelp);
 
 
   return (
-    <Paper sx={{  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s'  }}>
+    <Paper sx={{  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s' , overflowY: 'scroll' , overflowX: 'visible'  }}>
       <div className={`flex pl-3 pt-3 gap-3 relative `}>
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
@@ -143,7 +150,7 @@ console.log(issetting);
             <ListItemIcon sx={{minWidth: 35}}>
               <ManageAccountsIcon />
             </ListItemIcon>
-            <ListItemText primary="Setting" />
+            <ListItemText primary="Account Setting" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
             <ListItemIcon sx={{minWidth: 35}}>
@@ -151,20 +158,58 @@ console.log(issetting);
             </ListItemIcon>
             <ListItemText primary="Order & Payments" />
           </ListItemButton>
+          <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+            <ListItemIcon sx={{minWidth: 35}}>
+              <GTranslateIcon />
+            </ListItemIcon>
+            <ListItemText primary="Languages" />
+          </ListItemButton>
+          <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+            <ListItemIcon sx={{minWidth: 35}}>
+              <FcMindMap />
+            </ListItemIcon>
+            <ListItemText primary="Activity log" />
+          </ListItemButton>
       </div>
 
       <hr className='text-gray-300'/>
 
-      <MenuItem>
+      <MenuItem onClick={()=> setIsHelp(!isHelp)}>
         <ListItemIcon>
           <MdContactSupport fontSize="25px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>Help & Support</ListItemText>}
-        {menuExtend && <Button><KeyboardArrowDownIcon/></Button>}
+        {menuExtend && <Button>{ isHelp ? <KeyboardArrowUpIcon/>:<KeyboardArrowDownIcon/>}</Button>}
       </MenuItem>
+      <div className={`${isHelp ? 'h-[150px]':'h-[0px]'} overflow-hidden duration-500 `}>
+      <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+        <ListItemIcon sx={{minWidth: 35}}>
+          <LiaHandsHelpingSolid fontSize="23px"/>
+        </ListItemIcon>
+        <ListItemText primary="Help" />
+      </ListItemButton>
+      <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+        <ListItemIcon sx={{minWidth: 35}}>
+          <MoveToInboxIcon fontSize="medium"/>
+        </ListItemIcon>
+        <ListItemText primary="Support Inbox" />
+      </ListItemButton>
+      <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+        <ListItemIcon sx={{minWidth: 35}}>
+          <NotificationImportantIcon fontSize="medium"/>
+        </ListItemIcon>
+        <ListItemText primary="Report for problem" />
+      </ListItemButton>
+      </div>
       
       <hr className='text-gray-300'/>
 
+      <MenuItem>
+        <ListItemIcon>
+          <FcAbout fontSize="25px" />
+        </ListItemIcon>
+        {menuExtend && <ListItemText>About FriendLoop</ListItemText>}
+      </MenuItem>
       <MenuItem>
         <ListItemIcon>
           <IoIosLogOut fontSize="25px" />
