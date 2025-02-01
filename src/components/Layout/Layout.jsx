@@ -5,10 +5,10 @@ import { Outlet } from 'react-router';
 
 const Layout = () => {
   return (
-    <div className='flex'>
+    <div className='flex w-full  '>
         <MenuSide/>
-        <div className="w-full h-screen ">
-            <TopSearch/>
+        <div className="w-full h-screen overflow-y-scroll no-scrollbar">
+            <TopSearch className=" fixed top-0 left-0 "/>
             <Outlet/>
         </div>
     </div>

@@ -87,7 +87,7 @@ const Signin = () => {
       email: user.email,
       uid: user.uid ,
       metadata: {...user.metadata},
-      photoURL: user.photoURL
+      photoURL: user.photoURL ,
     })
     
     

@@ -89,7 +89,7 @@ export default function MenuSide() {
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
         {/* menu view option */}
-        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] ${menuExtend ? 'left-[335px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
+        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] z-[1] ${menuExtend ? 'left-[335px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
           {menuExtend ? <KeyboardArrowLeftIcon className={`${themeMode && 'text-white'}`}/> : <KeyboardArrowRightIcon className={`${themeMode && 'text-white'}`}/>}
         </button>
         

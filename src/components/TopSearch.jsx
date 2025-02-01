@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 const TopSearch = () => {
     const themeMode = useSelector((state)=>state.theme.value);
     return (
-    <Paper sx={{ borderRadius: 0,  padding: '5px 50px' , transition: '.8s' , }}  >
+    <Paper sx={{ borderRadius: 0,  padding: '5px 50px' , transition: '.8s'  }}  >
         <Box sx={{display: 'flex' , justifyContent: 'space-between' ,alignItems: 'center' ,  paddingBottom: 1}}  >
             <div className="flex items-center gap-3">
               <img src={Logo} alt="logo" className='w-[50px]' />
