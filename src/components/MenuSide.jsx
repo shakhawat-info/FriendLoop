@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {darktheme} from '../redux-store/features/dark-light theme/themeSlice';
 import { menushort } from '../redux-store/features/menuShort/menushortSlice';
+import { useLocation, useNavigate } from 'react-router';
 
 // components
 import Divider from '@mui/material/Divider';
@@ -9,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
+import ActiveNav from './ActiveNav';
 
 // icons
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -47,7 +49,9 @@ export default function MenuSide() {
   const [menuWidth , setMenuWidth] = React.useState(370)
   const dispatch = useDispatch();
   const [issetting , setIsetting] = React.useState(false);
-  const [isHelp , setIsHelp] = React.useState(false)
+  const [isHelp , setIsHelp] = React.useState(false);
+  const navigate = useNavigate();
+  const location = useLocation()
   
   // dark-light theme
   const handleTheme = ()=>{
@@ -66,25 +70,34 @@ export default function MenuSide() {
   },[menuExtend])
 
 
-// 
-console.log(isHelp);
+  // navigate to profile
+  let NavtoHome = ()=>{
+    navigate('/')
+    
+  }
+
+  // navigate to profile
+  let NavtoProfile = ()=>{
+    navigate('/profile')
+    
+  }
 
 
   return (
-    <Paper sx={{  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s' , overflowY: 'scroll' , overflowX: 'visible'  }}>
-      <div className={`flex pl-3 pt-3 gap-3 relative `}>
+    <Paper sx={{position: 'relative' ,  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s', overflowY: 'scroll' , borderRadius:0   }} className='no-scrollbar border-r border-r-white/20 font-Aldrich '>
+      <div className={`flex pl-3 pt-3 gap-3  `}>
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
         {/* menu view option */}
-        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] absolute duration-[.8s] top-[10px] ${menuExtend ? 'right-[-20px]': 'right-[-10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
+        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] ${menuExtend ? 'left-[335px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
           {menuExtend ? <KeyboardArrowLeftIcon className={`${themeMode && 'text-white'}`}/> : <KeyboardArrowRightIcon className={`${themeMode && 'text-white'}`}/>}
         </button>
         
-        <div className={` w-full  ${menuExtend ? ' pr-5':'mt-10'} duration-[.8s]`}>
+        <div className={` w-full  ${menuExtend ? ' pr-5':'mt-10'} duration-[.4s]`}>
           {menuExtend && <h2 className={`font-Aldrich ${menuExtend ? 'whitespace-wrap':'whitespace-nowrap'}`}>{data.displayName}</h2>}
           {menuExtend && <p className='font-Aldrich text-[13px]   '>user name</p>}
           <Divider sx={{marginTop: 1}}/>
-          <div className="flex justify-around  mt-3">
+          <div className={`flex justify-around  mt-3 ${!menuExtend && 'flex-col gap-5 '} `}>
 
           {/* theme options */}
             <button type="button" onClick={handleTheme } className=' cursor-pointer '>
@@ -96,13 +109,15 @@ console.log(isHelp);
       </div>
       <Divider sx={menuExtend ? {marginTop: 2} : {marginTop: 4}}/>
       <MenuList sx={{display: 'flex' , flexDirection: 'column', gap: 1}}>
-        <MenuItem>
+        <MenuItem onClick={NavtoHome}>
+        {location.pathname == '/' && <ActiveNav/>}
           <ListItemIcon>
             <AppsIcon fontSize="medium" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Home</ListItemText>}
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={NavtoProfile}>
+          {location.pathname == '/profile' && <ActiveNav/>}
           <ListItemIcon>
             <PersonPinIcon fontSize="medium" />
           </ListItemIcon>
@@ -172,7 +187,7 @@ console.log(isHelp);
           </ListItemButton>
       </div>
 
-      <hr className='text-gray-300'/>
+      <hr className={` w-full  ${themeMode ? ' text-black/10 ': ' text-gray-300/20'}`} />
 
       <MenuItem onClick={()=> setIsHelp(!isHelp)}>
         <ListItemIcon>
@@ -202,7 +217,7 @@ console.log(isHelp);
       </ListItemButton>
       </div>
       
-      <hr className='text-gray-300'/>
+      <hr className={` w-full  ${themeMode ? ' text-black/10 ': ' text-gray-300/20'}`} />
 
       <MenuItem>
         <ListItemIcon>

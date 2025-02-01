@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 // components
+import Layout from './components/Layout/Layout';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
-import MenuSide from './components/MenuSide';
-import Layout from './components/Layout/Layout';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -30,6 +30,7 @@ function App() {
         {data ? 
         <Route path='' element={<Layout/>}>
           <Route path='/' element={<Home/>}></Route>
+          <Route path='/profile' element={<Profile/>}></Route>
         </Route>
         :
         <Route path='/' element={<Signin/>}></Route>

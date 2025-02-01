@@ -15,7 +15,7 @@
   --font-Ubuntu: "Ubuntu", "serif";
 
   /* colors */
-  --color-brand: #e63f36;
+  --color-brand: #047efc;
 
   /* animations */
   --animate-rotate360: rotate360 3s linear infinite ;
@@ -44,6 +44,9 @@
 /* common css */
 .EffUnderline{
   @apply  after:absolute after:bottom-[-2px] after:left-0 after:w-[0] after:h-[1px] after:bg-brand after:duration-[.4s] hover:after:w-full;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 
