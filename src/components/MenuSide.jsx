@@ -66,7 +66,7 @@ export default function MenuSide() {
 
   React.useEffect(()=>{
     if(menuExtend) setMenuWidth(450);
-    if(!menuExtend) setMenuWidth(60);
+    if(!menuExtend) setMenuWidth(100);
   },[menuExtend])
 
 
@@ -89,7 +89,7 @@ export default function MenuSide() {
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
         {/* menu view option */}
-        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] z-[1] ${menuExtend ? 'left-[335px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
+        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] z-[1] ${menuExtend ? 'left-[360px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
           {menuExtend ? <KeyboardArrowLeftIcon className={`${themeMode && 'text-white'}`}/> : <KeyboardArrowRightIcon className={`${themeMode && 'text-white'}`}/>}
         </button>
         
@@ -112,38 +112,38 @@ export default function MenuSide() {
         <MenuItem onClick={NavtoHome}>
         {location.pathname == '/' && <ActiveNav/>}
           <ListItemIcon>
-            <AppsIcon fontSize="medium" />
+            <AppsIcon fontSize="large" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Home</ListItemText>}
         </MenuItem>
         <MenuItem onClick={NavtoProfile}>
           {location.pathname == '/profile' && <ActiveNav/>}
           <ListItemIcon>
-            <PersonPinIcon fontSize="medium" />
+            <PersonPinIcon fontSize="large" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Profile</ListItemText>}
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <ChatIcon fontSize="medium" />
+            <ChatIcon fontSize="large" />
           </ListItemIcon>
-          {menuExtend && <ListItemText>Messages</ListItemText>}
+          {menuExtend && <ListItemText >Messages</ListItemText>}
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <SupervisedUserCircleIcon fontSize="medium" />
+            <SupervisedUserCircleIcon fontSize="large" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Friends</ListItemText>}
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <CircleNotificationsIcon fontSize="medium" />
+            <CircleNotificationsIcon fontSize="large" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Notifications</ListItemText>}
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <PlayCircleOutlineIcon fontSize="medium" />
+            <PlayCircleOutlineIcon fontSize="large" />
           </ListItemIcon>
           {menuExtend && <ListItemText>Video</ListItemText>}
         </MenuItem>
@@ -153,7 +153,7 @@ export default function MenuSide() {
 
       <MenuItem onClick={()=>setIsetting(!issetting)}  >
         <ListItemIcon>
-          <FcSettings fontSize="25px" />
+          <FcSettings fontSize="35px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>Setting & Privacy</ListItemText>}
         {menuExtend && <Button>{issetting ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> }</Button>}
@@ -161,29 +161,29 @@ export default function MenuSide() {
 
       {/* setting options */}
       <div style={{height: issetting ? 200 : 0, flexDirection: 'column' , alignItems: 'start' , transition: '.4s' , padding: 0, margin: 0 , overflow: 'hidden'}}>
-          <ListItemButton sx={{ pl: 5 }}>
+          <ListItemButton sx={{ pl: 5}}>
             <ListItemIcon sx={{minWidth: 35}}>
-              <ManageAccountsIcon />
+              <ManageAccountsIcon fontSize="large"/>
             </ListItemIcon>
-            <ListItemText primary="Account Setting" />
+            {menuExtend && <ListItemText primary="Account Setting" />}
           </ListItemButton>
           <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
             <ListItemIcon sx={{minWidth: 35}}>
-              <AccountBalanceWalletIcon />
+              <AccountBalanceWalletIcon fontSize="large"/>
             </ListItemIcon>
-            <ListItemText primary="Order & Payments" />
+            {menuExtend && <ListItemText primary="Order & Payments" />}
           </ListItemButton>
           <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
             <ListItemIcon sx={{minWidth: 35}}>
-              <GTranslateIcon />
+              <GTranslateIcon fontSize="large"/>
             </ListItemIcon>
-            <ListItemText primary="Languages" />
+            {menuExtend && <ListItemText primary="Languages" />}
           </ListItemButton>
           <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
             <ListItemIcon sx={{minWidth: 35}}>
-              <FcMindMap />
+              <FcMindMap className='text-3xl'/>
             </ListItemIcon>
-            <ListItemText primary="Activity log" />
+            {menuExtend && <ListItemText primary="Activity log" />}
           </ListItemButton>
       </div>
 
@@ -191,7 +191,7 @@ export default function MenuSide() {
 
       <MenuItem onClick={()=> setIsHelp(!isHelp)}>
         <ListItemIcon>
-          <MdContactSupport fontSize="25px" />
+          <MdContactSupport fontSize="40px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>Help & Support</ListItemText>}
         {menuExtend && <Button>{ isHelp ? <KeyboardArrowUpIcon/>:<KeyboardArrowDownIcon/>}</Button>}
@@ -199,21 +199,21 @@ export default function MenuSide() {
       <div className={`${isHelp ? 'h-[150px]':'h-[0px]'} overflow-hidden duration-500 `}>
       <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
         <ListItemIcon sx={{minWidth: 35}}>
-          <LiaHandsHelpingSolid fontSize="23px"/>
+          <LiaHandsHelpingSolid fontSize="35px"/>
         </ListItemIcon>
-        <ListItemText primary="Help" />
+        {menuExtend && <ListItemText primary="Help" />}
       </ListItemButton>
-      <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+      <ListItemButton sx={{ pl: 5, minWidth: 10}}>
         <ListItemIcon sx={{minWidth: 35}}>
-          <MoveToInboxIcon fontSize="medium"/>
+          <MoveToInboxIcon fontSize="large"/>
         </ListItemIcon>
-        <ListItemText primary="Support Inbox" />
+        {menuExtend && <ListItemText primary="Support Inbox" />}
       </ListItemButton>
-      <ListItemButton sx={{ pl: 5 , minWidth: 10}}>
+      <ListItemButton sx={{ pl: 5, minWidth: 10}}>
         <ListItemIcon sx={{minWidth: 35}}>
-          <NotificationImportantIcon fontSize="medium"/>
+          <NotificationImportantIcon fontSize="large"/>
         </ListItemIcon>
-        <ListItemText primary="Report for problem" />
+        {menuExtend && <ListItemText primary="Report for problem" />}
       </ListItemButton>
       </div>
       
@@ -221,13 +221,13 @@ export default function MenuSide() {
 
       <MenuItem>
         <ListItemIcon>
-          <FcAbout fontSize="25px" />
+          <FcAbout fontSize="35px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>About FriendLoop</ListItemText>}
       </MenuItem>
       <MenuItem>
         <ListItemIcon>
-          <IoIosLogOut fontSize="25px" />
+          <IoIosLogOut fontSize="35px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>Log out</ListItemText>}
       </MenuItem>
