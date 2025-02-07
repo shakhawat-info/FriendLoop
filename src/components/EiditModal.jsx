@@ -77,14 +77,20 @@ const handlecheck = ()=>{
 
   return (
     <div className='w-full h-screen bg-black/70 fixed top-0 left-0 z-[1] grid place-items-center  '>
-        <div className="w-1/2 bg-white/70 rounded-lg  ">
+        <div className="w-1/2 bg-white/70 rounded-lg px-[70px] ">
             <h2 className=' font-Aldrich font-medium text-center py-2  '>{'editname'}</h2>
             <Divider/>
-            <Box sx={{display: 'flex' , justifyContent: 'center' , padding: '10px 0'  }}>
-              <TextField id="outlined-basic" label="UserName" variant="standard" sx={{width: '70%'  }} onChange={chooseUname} />
+            <Box sx={{display: 'flex' , justifyContent: 'space-between' , margin: '20px 0 5px'  }}>
+              <TextField id="outlined-basic" label="UserName" variant="standard" sx={{width: '80%'  }} onChange={chooseUname} />
               <Button variant="contained" endIcon={<GiArchiveResearch />} onClick={handlecheck}>Availability Check</Button>
             </Box>
-            {userNameErr && <p className='ml-6 font-Ubuntu text-red-500/50    '>{userNameErr}</p>}
+            <Box >
+              {userNameErr && <p className='font-Ubuntu text-red-500/50    '>{userNameErr}</p>}
+            </Box>
+            <Box sx={{padding: '30px 0 20px' , display: 'flex' , justifyContent: 'end' , gap:5}} >
+              <Button variant="outlined">Cancel</Button>
+              <Button variant="contained">Save</Button>
+            </Box>
 
         </div>
     </div>

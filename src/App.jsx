@@ -16,13 +16,13 @@ function App() {
   const isdark = useSelector((state)=>state.theme.value)
   
   
-  const darkTheme = createTheme({
+  const themeSet = createTheme({
     palette: {
       mode: isdark ? 'light':'dark',
     },
   });
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={themeSet}>
 
     <BrowserRouter>
       <Routes>

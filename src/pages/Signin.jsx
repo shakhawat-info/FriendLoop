@@ -53,7 +53,7 @@ const Signin = () => {
       console.log(user);
     // set data to database
     set(ref(db, 'users/' + user.uid), {
-      name: user.displayName,
+      displayName: user.displayName,
       email: user.email,
       uid: user.uid ,
       metadata: {...user.metadata},
@@ -83,7 +83,7 @@ const Signin = () => {
     
     // set data to database
     set(ref(db, 'users/' + user.uid), {
-      name: user.displayName,
+      displayName: user.displayName,
       email: user.email,
       uid: user.uid ,
       metadata: {...user.metadata},

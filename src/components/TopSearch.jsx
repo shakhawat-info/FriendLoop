@@ -1,6 +1,6 @@
 import { Box, Divider, Paper, TextField } from '@mui/material'
 import React from 'react'
-import Logo from '../../public/logo.png'
+import Logo from '/logo.png'
 import { SiGooglecampaignmanager360 } from "react-icons/si";
 import ManIcon from '@mui/icons-material/Man';
 import { useSelector } from 'react-redux';

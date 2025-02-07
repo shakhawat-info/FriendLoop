@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {darktheme} from '../redux-store/features/dark-light theme/themeSlice';
 import { menushort } from '../redux-store/features/menuShort/menushortSlice';
 import { useLocation, useNavigate } from 'react-router';
+import { otherUser } from '../redux-store/features/otherUser/OtherUserSlice';
 
 // components
 import Divider from '@mui/material/Divider';
@@ -73,13 +74,13 @@ export default function MenuSide() {
   // navigate to profile
   let NavtoHome = ()=>{
     navigate('/')
-    
   }
 
   // navigate to profile
   let NavtoProfile = ()=>{
     navigate('/profile')
-    
+    dispatch(otherUser(data.uid))
+    localStorage.setItem('profileID' , data.uid)
   }
 
 
