@@ -7,10 +7,13 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import cover from '../assets/cover.jpg';
 
 // component
-import { Box, Button, Divider, IconButton, Paper } from '@mui/material'
+import { Box, Button, Divider, FormControl, IconButton, InputLabel, MenuItem, Paper, Select  } from '@mui/material'
 import EiditModal from '../components/EiditModal';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+
+
+
 
 
 // icons
@@ -20,8 +23,10 @@ import MessageIcon from '@mui/icons-material/Message';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddIcon from '@mui/icons-material/Add';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import CloseIcon from '@mui/icons-material/Close';
+import TagIcon from '@mui/icons-material/Tag';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import AddReactionIcon from '@mui/icons-material/AddReaction';
 
 
 
@@ -38,7 +43,8 @@ const Profile = () => {
 
     // others states
     const [profile , setProfile] = useState({});
-    const [ispost , setIspost] = useState(false)
+    const [ispost , setIspost] = useState(false);
+    const [postprivacy, setPostprivacy] = React.useState('public');
 
 
 
@@ -56,7 +62,12 @@ const Profile = () => {
 const [profiletab, setProfiletab] = React.useState(0);
 const handleChange = (event, newValue) => {
   setProfiletab(newValue);
-  
+};
+
+
+// post privacy setting
+const handlepostprivacy = (event) => {
+  setPostprivacy(event.target.value);
 };
   
   
@@ -120,11 +131,35 @@ const handleChange = (event, newValue) => {
         {/* posts and about tabs */}
         <Box sx={{display: 'flex' , gap: 2 , justifyContent: 'space-between' , padding:'10px 50px'}}  >
           {/* post box */}
-          <Box sx={{ width: '100%'}}>
-            <Box sx={{padding: 2 , display: 'flex', gap: 2 , position: 'relative', boxShadow: ' rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' , borderRadius: 2}}>
+          <Box sx={{ width: '100%', height: ispost ? 700 : 100 , transition: '.6s' ,  borderRadius: 2, boxShadow: ' rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' , overflow: 'hidden'}}>
+            <Box sx={{  padding: 2 , display: 'flex', gap: 2 , position: 'relative'}}>
               <img src={profile.photoURL} alt="profile" className='rounded-full w-[70px] h-[70px]  '/>
               {!ispost && <input type="text" name="" id="" placeholder="what's on your mind" className='outline-0 w-full  ' onClick={()=>setIspost(true)}/> }
               {ispost && <Button variant="contained"  sx={{position: 'absolute' , top: 0 , right: 0}} onClick={()=> setIspost(false)}> <CloseIcon /> </Button>  }
+            </Box>
+            <Box sx={{width: '100%' , height: '100%' }}>
+              <textarea name="post" id="post" placeholder="What's on your mind ?" className=' w-full py-2 px-5 outline-0 min-h-[150px]  '></textarea>
+              <Box sx={{padding: '0 20px' , display : 'flex' , justifyContent: 'space-between'}} >
+                <FormControl>
+                  <InputLabel id="demo-simple-select-label">Privacy</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={postprivacy}
+                    label="Age"
+                    onChange={handlepostprivacy}
+                  >
+                    <MenuItem value="public">public</MenuItem>
+                    <MenuItem value="friends">friends</MenuItem>
+                    <MenuItem value="only me">only me</MenuItem>
+                  </Select>
+                </FormControl>
+                <Box>
+                  <IconButton aria-label="delete" size="large"> <TagIcon /> </IconButton>
+                  <IconButton aria-label="delete" size="large"> <AlternateEmailIcon /> </IconButton>
+                  <IconButton aria-label="delete" size="large"> <AddReactionIcon /> </IconButton>
+                </Box>
+              </Box>
             </Box>
           </Box>
 
