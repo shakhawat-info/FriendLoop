@@ -7,10 +7,12 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import cover from '../assets/cover.jpg';
 
 // component
-import { Box, Button, Divider, FormControl, IconButton, InputLabel, MenuItem, Paper, Select  } from '@mui/material'
+import { Box, Button, Divider, FormControl, IconButton, InputLabel, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select  } from '@mui/material'
+import { styled } from '@mui/material/styles';
 import EiditModal from '../components/EiditModal';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -27,6 +29,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import TagIcon from '@mui/icons-material/Tag';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
+import PublicIcon from '@mui/icons-material/Public';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
+import { CiImageOn } from "react-icons/ci";
+import { MdVideoLibrary } from "react-icons/md";
+import { BiPhotoAlbum } from "react-icons/bi";
+import { IoColorPaletteOutline } from "react-icons/io5";
+import { BsCameraReels } from "react-icons/bs";
+import { CiFaceSmile } from "react-icons/ci";
 
 
 
@@ -47,6 +58,17 @@ const Profile = () => {
     const [postprivacy, setPostprivacy] = React.useState('public');
 
 
+    // grid Item
+    const Item = styled(Paper)(({ theme }) => ({
+      backgroundColor: '#fff',
+      ...theme.typography.body2,
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#1A2027',
+      }),
+    }));
 
     useEffect(()=>{
       onValue(usersRef, (snapshot) => {
@@ -148,10 +170,14 @@ const handlepostprivacy = (event) => {
                     value={postprivacy}
                     label="Age"
                     onChange={handlepostprivacy}
+                    sx={{'.css-1ll44ll-MuiOutlinedInput-notchedOutline': {borderRadius: '30px'},
+                          '.css-rnk950-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':{padding: '5px 30px 5px 20px'},
+                         '.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':{padding: '5px 30px 5px 20px'}
+                       }}
                   >
-                    <MenuItem value="public">public</MenuItem>
-                    <MenuItem value="friends">friends</MenuItem>
-                    <MenuItem value="only me">only me</MenuItem>
+                    <MenuItem value="public"> <PublicIcon/> <span>Public</span></MenuItem>
+                    <MenuItem value="friends"> <PeopleAltIcon/> <span>Friends</span></MenuItem>
+                    <MenuItem value="only me"> <LockPersonIcon/> <span>Only me</span></MenuItem>
                   </Select>
                 </FormControl>
                 <Box>
@@ -160,6 +186,110 @@ const handlepostprivacy = (event) => {
                   <IconButton aria-label="delete" size="large"> <AddReactionIcon /> </IconButton>
                 </Box>
               </Box>
+
+              {/* post options */}
+              <Grid container spacing={2} className='px-5'>
+                 <Grid item xs={4}>
+                   <Item>
+                     <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <CiImageOn className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="image" />
+                      </ListItemButton>
+                    </ListItem>
+                   </Item>
+                 </Grid>
+                 <Grid item xs={4}>
+                   <Item>                     
+                    <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <MdVideoLibrary className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="video" />
+                      </ListItemButton>
+                    </ListItem>
+                  </Item>
+                 </Grid>
+                 <Grid item xs={4}>
+                   <Item>
+                    <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <BiPhotoAlbum className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="album" />
+                      </ListItemButton>
+                    </ListItem>
+                   </Item>
+                 </Grid>
+                 <Grid item xs={4}>
+                   <Item>
+                    <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <IoColorPaletteOutline className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="color" />
+                      </ListItemButton>
+                    </ListItem>
+                   </Item>
+                 </Grid>
+                 <Grid item xs={4}>
+                   <Item>
+                    <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <BsCameraReels className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="reels" />
+                      </ListItemButton>
+                    </ListItem>
+                   </Item>
+                 </Grid>
+                 <Grid item xs={4}>
+                   <Item>
+                    <ListItem disablePadding sx={{
+                      '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
+                      '.css-cfq8qh-MuiListItemText-root':{flex:0},
+                      '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
+                      }} >
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <CiFaceSmile className='text-2xl'/>
+                        </ListItemIcon>
+                        <ListItemText primary="fellings" />
+                      </ListItemButton>
+                    </ListItem>
+                   </Item>
+                 </Grid>
+               </Grid>
+
+
+              <Divider/>
+
             </Box>
           </Box>
 
