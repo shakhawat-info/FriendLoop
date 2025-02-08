@@ -7,7 +7,7 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import cover from '../assets/cover.jpg';
 
 // component
-import { Box, Button, Divider, FormControl, IconButton, InputLabel, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select  } from '@mui/material'
+import { Box, Button, Divider, FormControl, IconButton, InputLabel, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, TextField  } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import EiditModal from '../components/EiditModal';
 import Tabs from '@mui/material/Tabs';
@@ -38,6 +38,10 @@ import { BiPhotoAlbum } from "react-icons/bi";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { BsCameraReels } from "react-icons/bs";
 import { CiFaceSmile } from "react-icons/ci";
+import AlignHorizontalLeftIcon from '@mui/icons-material/AlignHorizontalLeft';
+import ArticleIcon from '@mui/icons-material/Article';
+import LinkIcon from '@mui/icons-material/Link';
+import PollIcon from '@mui/icons-material/Poll';
 
 
 
@@ -56,6 +60,8 @@ const Profile = () => {
     const [profile , setProfile] = useState({});
     const [ispost , setIspost] = useState(false);
     const [postprivacy, setPostprivacy] = React.useState('public');
+    const [postbtn , setPostbtn] = useState(false);
+    const [postFilter , setPostFilter] = useState('all')
 
 
     // grid Item
@@ -76,6 +82,7 @@ const Profile = () => {
           if(item.key == dataID) setProfile({...item.val()})
         })
     });
+    console.log(dataID);
     
   },[])
   
@@ -91,8 +98,46 @@ const handleChange = (event, newValue) => {
 const handlepostprivacy = (event) => {
   setPostprivacy(event.target.value);
 };
+
+
+// post button function
+const handleStatus = (e)=>{
+  console.log(e.target.value);
   
+if(e.target.value){
+  setPostbtn(true)
+}
+else{
+  setPostbtn(false)
+}
+}
+
+
+// post filter
+const allpost = ()=>{
+  setPostFilter('all')
+}
+
+const imagepost = ()=>{
+  setPostFilter('image')
+}
   
+const videopost = ()=>{
+  setPostFilter('video')
+}
+
+const textpost = ()=>{
+  setPostFilter('text')
+}
+
+const linkpost = ()=>{
+  setPostFilter('link')
+}
+
+const pollpost = ()=>{
+  setPostFilter('poll')
+}
+
 
   return (
     <Paper sx={{overflowY: 'scroll' , paddingRight: 2 , transition: '.8s'}} className='no-scrollbar' >
@@ -152,16 +197,20 @@ const handlepostprivacy = (event) => {
 
         {/* posts and about tabs */}
         <Box sx={{display: 'flex' , gap: 2 , justifyContent: 'space-between' , padding:'10px 50px'}}  >
+          <Box sx={{width: '100%'}}>
           {/* post box */}
-          <Box sx={{ width: '100%', height: ispost ? 700 : 100 , transition: '.6s' ,  borderRadius: 2, boxShadow: ' rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' , overflow: 'hidden'}}>
-            <Box sx={{  padding: 2 , display: 'flex', gap: 2 , position: 'relative'}}>
-              <img src={profile.photoURL} alt="profile" className='rounded-full w-[70px] h-[70px]  '/>
-              {!ispost && <input type="text" name="" id="" placeholder="what's on your mind" className='outline-0 w-full  ' onClick={()=>setIspost(true)}/> }
-              {ispost && <Button variant="contained"  sx={{position: 'absolute' , top: 0 , right: 0}} onClick={()=> setIspost(false)}> <CloseIcon /> </Button>  }
-            </Box>
-            <Box sx={{width: '100%' , height: '100%' }}>
-              <textarea name="post" id="post" placeholder="What's on your mind ?" className=' w-full py-2 px-5 outline-0 min-h-[150px]  '></textarea>
-              <Box sx={{padding: '0 20px' , display : 'flex' , justifyContent: 'space-between'}} >
+
+            <Box sx={{ width: '100%', height: ispost ? 550 : 100 , transition: '.6s' ,  borderRadius: 2, boxShadow: ' rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' , overflow: 'hidden'}}>
+              <Box sx={{  padding: 2 , display: 'flex', gap: 2 , position: 'relative'}}>
+                <img src={profile.photoURL} alt="profile" className='rounded-full w-[70px] h-[70px]  '/>
+                {!ispost && <input type="text" name="" id="" placeholder="what's on your mind" className='outline-0 w-full  ' onClick={()=>setIspost(true)}/> }
+                {ispost && <Button variant="contained"  sx={{position: 'absolute' , top: 0 , right: 0}} onClick={()=> setIspost(false)}> <CloseIcon /> </Button>  }
+              </Box>
+              <Box sx={{width: '100%' , height: '100%' }}>
+
+                <TextField onChange={handleStatus} id="outlined-multiline-static" label="Status" multiline rows={4} sx={{width: '98%' , margin: '30px 20px' , boxSizing: 'border-box' }}  />
+
+                <Box sx={{padding: '0 20px' , display : 'flex' , justifyContent: 'space-between'}} >
                 <FormControl>
                   <InputLabel id="demo-simple-select-label">Privacy</InputLabel>
                   <Select
@@ -185,17 +234,17 @@ const handlepostprivacy = (event) => {
                   <IconButton aria-label="delete" size="large"> <AlternateEmailIcon /> </IconButton>
                   <IconButton aria-label="delete" size="large"> <AddReactionIcon /> </IconButton>
                 </Box>
-              </Box>
+                </Box>
 
-              {/* post options */}
-              <Grid container spacing={2} className='px-5'>
-                 <Grid item xs={4}>
-                   <Item>
+                {/* post options */}
+                <Grid container spacing={2} className='px-5'>
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}  >
+                   <Item  >
                      <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <CiImageOn className='text-2xl'/>
@@ -205,13 +254,13 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                    </Item>
                  </Grid>
-                 <Grid item xs={4}>
-                   <Item>                     
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}>
+                   <Item >                      
                     <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <MdVideoLibrary className='text-2xl'/>
@@ -221,13 +270,13 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                   </Item>
                  </Grid>
-                 <Grid item xs={4}>
-                   <Item>
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}>
+                   <Item >
                     <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <BiPhotoAlbum className='text-2xl'/>
@@ -237,13 +286,13 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                    </Item>
                  </Grid>
-                 <Grid item xs={4}>
-                   <Item>
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}>
+                   <Item  >
                     <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <IoColorPaletteOutline className='text-2xl'/>
@@ -253,13 +302,13 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                    </Item>
                  </Grid>
-                 <Grid item xs={4}>
-                   <Item>
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}>
+                   <Item  >
                     <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <BsCameraReels className='text-2xl'/>
@@ -269,13 +318,14 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                    </Item>
                  </Grid>
-                 <Grid item xs={4}>
-                   <Item>
+                 <Grid item xs={4} sx={{'.css-16carsw-MuiPaper-root':{boxShadow: 'none'}}}>
+                   <Item  >
                     <ListItem disablePadding sx={{
                       '.css-4bx69l-MuiButtonBase-root-MuiListItemButton-root':{justifyContent: 'center' , gap: '10px'},
                       '.css-cfq8qh-MuiListItemText-root':{flex:0},
                       '.css-cokf1l-MuiListItemIcon-root':{minWidth: 'fit-content'},
-                      }} >
+
+                      }} className='border-2 border-black/10 rounded-[5px]' >
                       <ListItemButton>
                         <ListItemIcon>
                           <CiFaceSmile className='text-2xl'/>
@@ -285,12 +335,23 @@ const handlepostprivacy = (event) => {
                     </ListItem>
                    </Item>
                  </Grid>
-               </Grid>
+                 </Grid>
+
+                 <Box sx={{margin: '10px 20px', display: 'flex' , justifyContent: 'end'}}><Button  variant={postbtn ? 'contained' : 'outlined'} endIcon={<SendIcon />}> Post</Button></Box>
 
 
-              <Divider/>
-
+              </Box>
             </Box>
+
+          {/* post filtters */}
+          <Box sx={{margin: '20px 0' , display: 'flex' , gap:2}}>
+            <Button onClick={allpost} variant={postFilter == 'all' ? 'contained' : 'outlined'} startIcon={<AlignHorizontalLeftIcon />}>All</Button>
+            <Button onClick={imagepost} variant={postFilter == 'image' ? 'contained' : 'outlined'} startIcon={<CiImageOn />}>image</Button>
+            <Button onClick={videopost} variant={postFilter == 'video' ? 'contained' : 'outlined'} startIcon={<MdVideoLibrary />}>videos</Button>
+            <Button onClick={textpost} variant={postFilter == 'text' ? 'contained' : 'outlined'} startIcon={<ArticleIcon />}>text</Button>
+            <Button onClick={linkpost} variant={postFilter == 'link' ? 'contained' : 'outlined'} startIcon={<LinkIcon />}>links</Button>
+            <Button onClick={pollpost} variant={postFilter == 'poll' ? 'contained' : 'outlined'} startIcon={<PollIcon />}>polls</Button>
+          </Box>
           </Box>
 
           {/* about box */}
