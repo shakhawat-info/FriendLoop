@@ -16,8 +16,8 @@ const UserItem = ({image , name , mutual , id , add , request , sent , addedby ,
 
     let gotToprofile = (id)=>{
         navigate('/profile')
-        dispatch(otherUser(id))
-        localStorage.setItem('profileID' , id)
+        dispatch(otherUser(id.uid))
+        localStorage.setItem('profileID' , id.uid)
     }
 
     // handleadd function

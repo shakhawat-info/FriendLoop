@@ -85,8 +85,6 @@ const Profile = () => {
         snapshot.forEach((item)=>{
           if(item.key == dataID) {
             setProfile({...item.val()})
-            console.log(item.val());
-            
           }
         })
     });

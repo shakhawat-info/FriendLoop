@@ -11,9 +11,8 @@ import { RiUserReceivedLine } from "react-icons/ri";
 import UserItem from '../components/UserItem';
 
 
-import cover from '../assets/cover.jpg'
-import { useSelector } from 'react-redux';
-import Add from '../components/Add';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const Friends = () => {
 
@@ -22,23 +21,23 @@ const Friends = () => {
   const userRef = ref(db, 'users/');
   const requestRef = ref(db, 'requests/');
   const [friendchoosetab , setFriendchoosetab ] = useState('add');
+  const [allItem , setAllItem] = useState([]);
   const [alluser , setAlluser] = useState([]);
   const [allrequest , setAllrequest] = useState([]);
   const [allsent , setAllsent] = useState([]);
   const currentUser = useSelector((state)=>state.user.value);
 
-  
+
 
   useEffect(()=>{
-
     // all user fetch
     onValue(userRef, (snapshot) => {
       let allusers = []
       snapshot.forEach((item)=>{
         if(currentUser.uid !== item.key) allusers.push(item)
       })
-      setAlluser(allusers);
-    });
+      setAllItem(allusers)
+    })
     
     
     // all requests fetch
@@ -58,13 +57,21 @@ const Friends = () => {
         if(currentUser.uid == item.val().sender.uid) allsents.push(item)
       })
       setAllsent(allsents)
-    });
 
- console.log(allsent.length);
+    });
     
     
     
-  },[alluser.length])
+    // // remove requests from all item
+    const requestRemoved = allItem.filter((alitem)=> !allrequest.some((alrequ)=> alitem.key == alrequ.val().sender.uid))
+    
+    // remove sent item 
+    const sentRm = requestRemoved.filter((requrm)=> !allsent.some((alsnt)=> requrm.key == alsnt.val().receiver.uid ))
+      
+    setAlluser(sentRm)
+
+
+  },[friendchoosetab])
   
   
   return (
@@ -94,7 +101,8 @@ const Friends = () => {
       {/* friend add tab */}
       {friendchoosetab == 'add' && 
       <Box>
-        {alluser.map((item)=>(
+        {alluser.length > 0 &&
+        alluser.map((item)=>(
           <UserItem image={item.val().photoURL} name={item.val().displayName} mutual='20' add={true} id={item.val()} addedby={currentUser} />
         ))}
       </Box>
