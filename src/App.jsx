@@ -9,6 +9,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Friends from './pages/Friends';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path='' element={<Layout/>}>
           <Route path='/' element={<Home/>}></Route>
           <Route path='/profile' element={<Profile/>}></Route>
+          <Route path='/friend' element={<Friends/>}></Route>
         </Route>
         :
         <Route path='/' element={<Signin/>}></Route>

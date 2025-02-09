@@ -49,8 +49,10 @@ import PollIcon from '@mui/icons-material/Poll';
 
 
 const Profile = () => {
-    // current user data
+    // user data
+    const currentUser = useSelector((state)=>state.user.value)
     const dataID = useSelector((state)=>state.otherUser.value);
+    
 
     // database
     const db = getDatabase();
@@ -63,6 +65,8 @@ const Profile = () => {
     const [postbtn , setPostbtn] = useState(false);
     const [postFilter , setPostFilter] = useState('all')
 
+    console.log(profile);
+    
 
     // grid Item
     const Item = styled(Paper)(({ theme }) => ({
@@ -79,12 +83,15 @@ const Profile = () => {
     useEffect(()=>{
       onValue(usersRef, (snapshot) => {
         snapshot.forEach((item)=>{
-          if(item.key == dataID) setProfile({...item.val()})
+          if(item.key == dataID) {
+            setProfile({...item.val()})
+            console.log(item.val());
+            
+          }
         })
     });
-    console.log(dataID);
     
-  },[])
+  },[dataID])
   
   
 // active profile nav function
@@ -165,11 +172,11 @@ const pollpost = ()=>{
             <h5 className='font-Ubuntu flex justify-end items-center gap-1 '><span>{profile.metadata?.createdAt}</span><CiEdit className='text-xl cursor-pointer '/></h5>
             <Box sx={{padding : '20px 0', display: 'flex' , justifyContent: 'end' , gap: '20px'}}  >
               
-              {profile.uid == dataID ? 
+              {profile.uid == currentUser.uid ? 
               <Button variant="contained" startIcon={<AddIcon />}>add story</Button>:
-              <Button variant="contained" startIcon={<SendIcon />}>message</Button>}
+              <Button variant="contained" startIcon={<SendIcon />}>hi</Button>}
 
-              {profile.uid == dataID ? 
+              {profile.uid == currentUser.uid ? 
               <Button variant="outlined" startIcon={<ModeEditIcon />}>edit profile</Button> : 
               <Button variant="outlined" startIcon={<MessageIcon />}>message</Button> }
               <Button variant="outlined" startIcon={<MoreHorizIcon />}>more</Button> 
@@ -198,8 +205,9 @@ const pollpost = ()=>{
         {/* posts and about tabs */}
         <Box sx={{display: 'flex' , gap: 2 , justifyContent: 'space-between' , padding:'10px 50px'}}  >
           <Box sx={{width: '100%'}}>
-          {/* post box */}
 
+          {/* post box */}
+          {profile.uid == currentUser.uid && 
             <Box sx={{ width: '100%', height: ispost ? 550 : 100 , transition: '.6s' ,  borderRadius: 2, boxShadow: ' rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' , overflow: 'hidden'}}>
               <Box sx={{  padding: 2 , display: 'flex', gap: 2 , position: 'relative'}}>
                 <img src={profile.photoURL} alt="profile" className='rounded-full w-[70px] h-[70px]  '/>
@@ -342,6 +350,7 @@ const pollpost = ()=>{
 
               </Box>
             </Box>
+          }
 
           {/* post filtters */}
           <Box sx={{margin: '20px 0' , display: 'flex' , gap:2}}>

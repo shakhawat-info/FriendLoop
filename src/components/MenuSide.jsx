@@ -83,6 +83,11 @@ export default function MenuSide() {
     localStorage.setItem('profileID' , data.uid)
   }
 
+  // navigate to friends
+  let NavtoFriends = ()=>{
+    navigate('/friend')
+  }
+
 
   return (
     <Paper sx={{position: 'relative' ,  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s', overflowY: 'scroll' , borderRadius:0   }} className='no-scrollbar border-r border-r-white/20 font-Aldrich '>
@@ -130,7 +135,7 @@ export default function MenuSide() {
           </ListItemIcon>
           {menuExtend && <ListItemText >Messages</ListItemText>}
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={NavtoFriends}>
           <ListItemIcon>
             <SupervisedUserCircleIcon fontSize="large" />
           </ListItemIcon>
