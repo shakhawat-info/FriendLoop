@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { otherUser } from '../redux-store/features/otherUser/OtherUserSlice'
+import { alluser } from '../redux-store/features/alluser/alluserSlice'
 import { getDatabase, ref, set , push , remove } from "firebase/database";
 
 
@@ -25,7 +26,9 @@ const UserItem = ({image , name , mutual , id , add , request , sent , addedby ,
       set(push(ref(db, 'requests/')), {
         sender: {...addedby},
         receiver: {...id}
-      });
+      }).then(()=>{
+        dispatch(alluser())
+      })
     }
 
     // handlecancel function

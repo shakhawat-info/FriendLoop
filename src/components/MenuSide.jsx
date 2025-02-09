@@ -4,6 +4,7 @@ import {darktheme} from '../redux-store/features/dark-light theme/themeSlice';
 import { menushort } from '../redux-store/features/menuShort/menushortSlice';
 import { useLocation, useNavigate } from 'react-router';
 import { otherUser } from '../redux-store/features/otherUser/OtherUserSlice';
+import { alluser } from '../redux-store/features/alluser/alluserSlice';
 
 // components
 import Divider from '@mui/material/Divider';
@@ -86,6 +87,7 @@ export default function MenuSide() {
   // navigate to friends
   let NavtoFriends = ()=>{
     navigate('/friend')
+    dispatch(alluser())
   }
 
 

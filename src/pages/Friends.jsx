@@ -12,6 +12,7 @@ import UserItem from '../components/UserItem';
 
 
 import { useDispatch, useSelector } from 'react-redux';
+import Notfound from './Notfound';
 
 
 const Friends = () => {
@@ -20,12 +21,14 @@ const Friends = () => {
   const db = getDatabase();
   const userRef = ref(db, 'users/');
   const requestRef = ref(db, 'requests/');
-  const [friendchoosetab , setFriendchoosetab ] = useState('add');
+  const [friendchoosetab , setFriendchoosetab ] = useState('request');
   const [allItem , setAllItem] = useState([]);
   const [alluser , setAlluser] = useState([]);
   const [allrequest , setAllrequest] = useState([]);
   const [allsent , setAllsent] = useState([]);
   const currentUser = useSelector((state)=>state.user.value);
+  const alusr = useSelector((state)=>state.alluser.value);
+
 
 
 
@@ -37,6 +40,7 @@ const Friends = () => {
         if(currentUser.uid !== item.key) allusers.push(item)
       })
       setAllItem(allusers)
+      
     })
     
     
@@ -47,6 +51,7 @@ const Friends = () => {
         if(currentUser.uid == item.val().receiver.uid) allrequests.push(item)
       })
       setAllrequest(allrequests)
+      
     });
 
 
@@ -61,17 +66,17 @@ const Friends = () => {
     });
     
     
-    
     // // remove requests from all item
     const requestRemoved = allItem.filter((alitem)=> !allrequest.some((alrequ)=> alitem.key == alrequ.val().sender.uid))
     
     // remove sent item 
     const sentRm = requestRemoved.filter((requrm)=> !allsent.some((alsnt)=> requrm.key == alsnt.val().receiver.uid ))
-      
+          
     setAlluser(sentRm)
 
 
-  },[friendchoosetab])
+
+  },[currentUser , friendchoosetab , alusr])
   
   
   return (
@@ -91,8 +96,8 @@ const Friends = () => {
 
       {/* friend choose tab button */}
       <Box sx={{display: 'flex' , gap: '20px'}}>
-        <Button variant={friendchoosetab == 'add' ? 'contained' : 'outlined'} startIcon={<GoPersonAdd/>} onClick={()=>setFriendchoosetab('add')} >Add</Button>
         <Button variant={friendchoosetab == 'request' ? 'contained' : 'outlined'} startIcon={<RiUserReceivedLine/>} onClick={()=> setFriendchoosetab('request')}>Requests</Button>
+        <Button variant={friendchoosetab == 'add' ? 'contained' : 'outlined'} startIcon={<GoPersonAdd/>} onClick={()=>setFriendchoosetab('add')} >Add</Button>
         <Button variant={friendchoosetab == 'sent' ? 'contained' : 'outlined'} startIcon={<RiUserSharedLine/>} onClick={()=>setFriendchoosetab('sent')}>Sent</Button>
       </Box>
 
@@ -100,7 +105,7 @@ const Friends = () => {
 
       {/* friend add tab */}
       {friendchoosetab == 'add' && 
-      <Box>
+      <Box sx={{display: 'flex' , flexDirection: 'column' , gap: 1}}>
         {alluser.length > 0 &&
         alluser.map((item)=>(
           <UserItem image={item.val().photoURL} name={item.val().displayName} mutual='20' add={true} id={item.val()} addedby={currentUser} />
@@ -112,10 +117,10 @@ const Friends = () => {
       {/* friend request tab */}
       {friendchoosetab == 'request' && 
         <Box key={2}>
-          {allrequest.length == 0 && <h2>no user found</h2>  }
+          {allrequest.length == 0 && <Notfound msg="No Request Found" />  }
           {allrequest.length >= 1 &&
           allrequest.map((item)=>(
-            <UserItem image={item.val().sender.photoURL} name={item.val().sender.displayName} mutual='20' request={true} id={item.key}  />
+            <UserItem image={item.val().sender.photoURL}  name={item.val().sender.displayName} mutual='20' request={true} id={item.key}  />
           ))
           }
         </Box>
@@ -125,10 +130,10 @@ const Friends = () => {
       {/* friend sent tab */}
       {friendchoosetab == 'sent' && 
         <Box key={3}>
-          {allsent.length == 0 && <h2>no user found</h2>  }
+          {allsent.length == 0 && <Notfound msg="No Data Found"/>  }
           {allsent.length >= 1 &&
           allsent.map((item)=>(
-            <UserItem image={item.val().receiver.photoURL} name={item.val().receiver.displayName} mutual='20' sent={true} calcelID={item.key}  />
+            <UserItem image={item.val().receiver.photoURL} id={item.val().receiver}  name={item.val().receiver.displayName} mutual='20' sent={true} calcelID={item.key}  />
           ))
           }
         </Box>
