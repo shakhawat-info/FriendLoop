@@ -5,6 +5,8 @@ import { menushort } from '../redux-store/features/menuShort/menushortSlice';
 import { useLocation, useNavigate } from 'react-router';
 import { otherUser } from '../redux-store/features/otherUser/OtherUserSlice';
 import { alluser } from '../redux-store/features/alluser/alluserSlice';
+import { getAuth, signOut } from "firebase/auth";
+import {userSlice} from '../redux-store/features/currentuser/currentuserSlice'
 
 // components
 import Divider from '@mui/material/Divider';
@@ -56,6 +58,7 @@ export default function MenuSide() {
   const navigate = useNavigate();
   const location = useLocation();
   const [ismodal , setIsmodal] = React.useState(false)
+  const auth = getAuth();
   
   // dark-light theme
   const handleTheme = ()=>{
@@ -91,18 +94,21 @@ export default function MenuSide() {
     navigate('/friend')
     dispatch(alluser())
   }
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+  
 
+  // handleLogout func
+  const handleLogout = ()=>{
+    setIsmodal(false)
+    signOut(auth).then(() => {
+      localStorage.removeItem("user")
+      localStorage.removeItem("profileID")
+      navigate('/')
+      dispatch(userSlice(null))
+    }).catch((error) => {
+      
+    });
+    
+  }
 
   return (
     <Paper  sx={{position: 'relative' ,  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s', overflowY: 'scroll' , borderRadius:0   }} className='no-scrollbar border-r border-r-white/20 font-Aldrich '>
@@ -259,13 +265,13 @@ export default function MenuSide() {
         open={ismodal}
         onClose={()=> setIsmodal(false)}
       >
-        <Box sx={style}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000',boxShadow: 24, p: 4, }}>
           <h2>You are trying to logout from FriendLoop!</h2>
           <h3>Are you sure?</h3>
           
           <Box sx={{display:'flex' , justifyContent:'space-between', marginTop:'30px'}} >
             <Button variant="outlined" onClick={()=>setIsmodal(false)}>no</Button>
-            <Button variant='contained' endIcon={<RiLogoutCircleRLine/>} >yes</Button>
+            <Button variant='contained' endIcon={<RiLogoutCircleRLine/>} onClick={handleLogout} >yes</Button>
           </Box>
         </Box>
       </Modal>
