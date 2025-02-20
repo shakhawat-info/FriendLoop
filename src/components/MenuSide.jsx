@@ -26,7 +26,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AppsIcon from '@mui/icons-material/Apps';
 import { FcSettings } from "react-icons/fc";
-import { Button, ListItemButton } from '@mui/material';
+import { Box, Button, ListItemButton, Modal, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { MdContactSupport } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
@@ -40,6 +40,7 @@ import { LiaHandsHelpingSolid } from "react-icons/lia";
 import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 import { FcAbout } from "react-icons/fc";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 
 
@@ -53,7 +54,8 @@ export default function MenuSide() {
   const [issetting , setIsetting] = React.useState(false);
   const [isHelp , setIsHelp] = React.useState(false);
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
+  const [ismodal , setIsmodal] = React.useState(false)
   
   // dark-light theme
   const handleTheme = ()=>{
@@ -89,15 +91,26 @@ export default function MenuSide() {
     navigate('/friend')
     dispatch(alluser())
   }
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 
   return (
-    <Paper sx={{position: 'relative' ,  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s', overflowY: 'scroll' , borderRadius:0   }} className='no-scrollbar border-r border-r-white/20 font-Aldrich '>
+    <Paper  sx={{position: 'relative' ,  width: menuWidth, maxWidth: '100%' , height: '100vh', transition: '.8s', overflowY: 'scroll' , borderRadius:0   }} className='no-scrollbar border-r border-r-white/20 font-Aldrich '>
       <div className={`flex pl-3 pt-3 gap-3  `}>
         {menuExtend && <img src={data.photoURL} alt="profile" className='w-[100px] h-[100px] rounded-[20px]    '/>}
 
         {/* menu view option */}
-        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] z-[1] ${menuExtend ? 'left-[360px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
+        <button onClick={menuView} type="button" className={`cursor-pointer bg-[#52565e] fixed duration-[1s] top-[10px] z-[1] ${menuExtend ? 'left-[345px]': 'left-[10px]'}  w-[40px] h-[40px] rounded-full border-2 border-white    `}>
           {menuExtend ? <KeyboardArrowLeftIcon className={`${themeMode && 'text-white'}`}/> : <KeyboardArrowRightIcon className={`${themeMode && 'text-white'}`}/>}
         </button>
         
@@ -233,12 +246,30 @@ export default function MenuSide() {
         </ListItemIcon>
         {menuExtend && <ListItemText>About FriendLoop</ListItemText>}
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={()=>setIsmodal(true)}>
         <ListItemIcon>
           <IoIosLogOut fontSize="35px" />
         </ListItemIcon>
         {menuExtend && <ListItemText>Log out</ListItemText>}
       </MenuItem>
+
+      {/* modal */}
+      {ismodal && 
+      <Modal
+        open={ismodal}
+        onClose={()=> setIsmodal(false)}
+      >
+        <Box sx={style}>
+          <h2>You are trying to logout from FriendLoop!</h2>
+          <h3>Are you sure?</h3>
+          
+          <Box sx={{display:'flex' , justifyContent:'space-between', marginTop:'30px'}} >
+            <Button variant="outlined" onClick={()=>setIsmodal(false)}>no</Button>
+            <Button variant='contained' endIcon={<RiLogoutCircleRLine/>} >yes</Button>
+          </Box>
+        </Box>
+      </Modal>
+      }
     </Paper>
   );
 }
